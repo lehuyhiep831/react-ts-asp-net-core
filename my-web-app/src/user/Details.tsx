@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { User, deleteUser, getUser } from '../_services'
+import { User, deleteUser, getUser } from '../_services/User.services'
 
 export function Details() {
 	const { id } = useParams()

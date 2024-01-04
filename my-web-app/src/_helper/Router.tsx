@@ -1,14 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import App from '../App'
+import { ErrorPage } from '../errors/Errors'
 import { Dashboard } from '../home/Dashboard'
 import { Add, Details, Edit, List } from '../user'
-import { ErrorPage } from '../errors/Errors'
+import { Root } from './Root'
 
 export const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <App />,
+		element: <Root />,
 		errorElement: <ErrorPage />,
 		children: [
 			{

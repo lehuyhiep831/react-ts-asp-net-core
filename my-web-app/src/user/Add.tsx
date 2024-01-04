@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import logo from './../logo.svg'
-import { User, addUser, addUserAsync } from '../_services'
+import { User, addUser, addUserAsync } from '../_services/User.services'
 
 type FormData = {
 	name: string

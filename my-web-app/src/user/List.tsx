@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import { User, getUsers } from '../_services'
-import { HubConnectionBuilder, HttpTransportType, HubConnectionState } from '@microsoft/signalr'
-import { Notification } from './Notification'
+import { User, getUsers } from '../_services/User.services'
 
 export function List() {
 	const [users, setUsers] = useState<User[]>()
