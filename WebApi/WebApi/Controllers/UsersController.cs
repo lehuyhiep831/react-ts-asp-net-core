@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models;
 using WebApi.Services;
@@ -39,6 +40,14 @@ namespace WebApi.Controllers
         {
             var user = _userService.Add(model);
             return Ok(new { id= user?.Id, message = "User added successfully" });
+        }
+
+
+        [HttpPost("AddAsync")]
+        public async Task<ActionResult<User>> AddAsync(AddUser model)
+        {
+            var user = await _userService.AddAsync(model);
+            return Ok(user);
         }
 
         [HttpPut("{id}")]

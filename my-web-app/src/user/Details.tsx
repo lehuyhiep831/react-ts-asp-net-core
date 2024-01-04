@@ -30,8 +30,19 @@ export function Details() {
 		<div>
 			{user ? (
 				<>
+					<div className="Page-title">
+						<h4>User details</h4>
+						<h4>
+							<Link
+								className="App-link"
+								to={`/users`}
+							>
+								Back
+							</Link>
+						</h4>
+					</div>
 					{`${user.name} are ${user.age} years old! `}
-					<Link to={`/users/${user.id}/edit`}>Update?</Link>
+					<button onClick={() => navigate(`/users/${user.id}/edit`)}>Update?</button>
 					{`or`}
 					<button
 						type="button"
@@ -44,7 +55,12 @@ export function Details() {
 			) : (
 				<>
 					{`Ops! user not found`}
-					<Link to={`/users`}>Go back?</Link>{' '}
+					<Link
+						className="App-link"
+						to={`/users`}
+					>
+						Go back?
+					</Link>{' '}
 				</>
 			)}{' '}
 		</div>

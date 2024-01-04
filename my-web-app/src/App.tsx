@@ -1,7 +1,6 @@
-import React from 'react'
-
-import './App.css'
 import { Link, Outlet } from 'react-router-dom'
+import './App.css'
+import { Notification } from './user'
 
 function App() {
 	return (
@@ -20,6 +19,7 @@ function App() {
 				>
 					Users
 				</Link>
+				<Notification></Notification>
 			</header>
 			<div className="App-body">
 				<Outlet />

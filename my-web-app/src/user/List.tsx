@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { User, getUsers } from '../_services'
+import { HubConnectionBuilder, HttpTransportType, HubConnectionState } from '@microsoft/signalr'
+import { Notification } from './Notification'
 
 export function List() {
 	const [users, setUsers] = useState<User[]>()
+
 	const location = useLocation()
 	useEffect(() => {
 		console.log('get new data')
@@ -17,7 +20,7 @@ export function List() {
 
 	return (
 		<div className="Page-container">
-			<div className="Page-title">
+			<div className="Page-sidebar">
 				<h4>User list</h4>{' '}
 				<Link
 					className="App-link"
@@ -25,14 +28,20 @@ export function List() {
 				>
 					Add User
 				</Link>
+				{users?.map((user: User) => (
+					<div key={user.id}>
+						<Link
+							className="App-link"
+							to={`/users/${user.id}`}
+						>
+							{user.name}
+						</Link>
+					</div>
+				))}
 			</div>
-
-			{users?.map((user: User) => (
-				<div key={user.id}>
-					<Link to={`/users/${user.id}`}>{user.name}</Link>
-				</div>
-			))}
-			<Outlet></Outlet>
+			<div className="Page-content">
+				<Outlet></Outlet>
+			</div>
 		</div>
 	)
 }

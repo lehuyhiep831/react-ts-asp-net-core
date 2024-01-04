@@ -2,8 +2,8 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import App from '../App'
 import { Dashboard } from '../home/Dashboard'
-import { AddEdit, Details, List } from '../user'
-import { ErrorPage } from './Errors'
+import { Add, Details, Edit, List } from '../user'
+import { ErrorPage } from '../errors/Errors'
 
 export const router = createBrowserRouter([
 	{
@@ -20,12 +20,16 @@ export const router = createBrowserRouter([
 				element: <List />,
 				children: [
 					{
+						path: '/users/add',
+						element: <Add />,
+					},
+					{
 						path: '/users/:id',
 						element: <Details />,
 					},
 					{
 						path: '/users/:id/edit',
-						element: <AddEdit />,
+						element: <Edit />,
 					},
 					{
 						path: '/users/not-found',
@@ -34,8 +38,8 @@ export const router = createBrowserRouter([
 				],
 			},
 			{
-				path: '/users/add',
-				element: <AddEdit />,
+				path: '/errors',
+				element: <ErrorPage />,
 			},
 		],
 	},

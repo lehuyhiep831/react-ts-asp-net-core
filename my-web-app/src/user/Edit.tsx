@@ -1,26 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { addUser, editUser, getUser } from '../_services'
+import { User, editUser, getUser } from '../_services'
 
 type FormData = {
 	name: string
 	age: number
 }
-export function AddEdit() {
+export function Edit() {
 	const { id } = useParams()
 	const navigate = useNavigate()
 
 	const [formData, setFormData] = useState<FormData>({ name: '', age: 0 })
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [result, setResult] = useState<{ id?: number; message?: string }>()
+	const [result, setResult] = useState<User>()
 
 	useEffect(() => {
 		if (id)
 			getUser(id)
 				.then((res) => {
-					if (res) setFormData({ name: res.name, age: res.age })
+					setFormData({ name: res.name, age: res.age })
 				})
 				.catch((err) => {
+					// user not found !?!
 					if (err.status === 404) navigate('/users/not-found')
 				})
 	}, [id, navigate])
@@ -39,41 +40,26 @@ export function AddEdit() {
 			if (id) {
 				const response = await editUser(id, formData)
 				setResult(response)
-			} else {
-				const response = await addUser(formData)
-				setResult(response)
 			}
 		} catch (error) {
 			// Handle error, show error message, etc.
-			console.log('Submission error:', error)
 		}
 
 		setIsSubmitting(false)
 	}
 
 	return (
-		<div className="Page-container">
+		<>
 			<div className="Page-title">
-				{id ? <h4>Change {formData.name} age</h4> : <h4>Add a user</h4>}
+				<h4>Edit a user</h4>
 				<Link
 					className="App-link"
-					to={'/users'}
+					to={`/users/${id}`}
 				>
-					Back
+					Cancel
 				</Link>
 			</div>
 			<form onSubmit={onSubmit}>
-				{!id ? (
-					<label>
-						Name:{' '}
-						<input
-							name="name"
-							type="text"
-							value={formData?.name}
-							onChange={handleInputChange}
-						></input>
-					</label>
-				) : null}
 				<label>
 					Age:{' '}
 					<input
@@ -92,16 +78,18 @@ export function AddEdit() {
 				</button>
 			</form>
 
-			{result &&
-				(result.id ? (
-					<div>
-						New user added successfully! <Link to={`/users/${result.id}`}>See Detail</Link>
-					</div>
-				) : (
-					<div>
-						Update successfully! <Link to={`/users/${id}`}>return ?</Link>
-					</div>
-				))}
-		</div>
+			{result && (
+				<>
+					Update successfully!{' '}
+					<Link
+						className="App-link"
+						to={`/users/${id}`}
+					>
+						{' '}
+						Check it out?
+					</Link>
+				</>
+			)}
+		</>
 	)
 }

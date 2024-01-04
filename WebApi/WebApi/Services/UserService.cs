@@ -10,29 +10,23 @@ namespace WebApi.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         User? Add(AddUser model);
+        Task<User> AddAsync(AddUser model);
         void Edit(int id, EditUser model);
         void Remove(int id);
     }
-    public class UserService : IUserService
-    { 
-        private DataContext _context;
-        private readonly IMapper _mapper;
-
-        public UserService(
-            DataContext context,
-            IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+    public class UserService(
+        DataContext context,
+        IMapper mapper,
+         INotificationService notificationService) : IUserService
+    {
         public User? Add(AddUser model)
         {
             // map model to new user object
-            var user = _mapper.Map<User>(model);
+            var user = mapper.Map<User>(model);
 
             // save user
-           var newUser =  _context.Users.Add(user);
-            _context.SaveChanges();
+           var newUser =  context.Users.Add(user);
+            context.SaveChanges();
 
             return newUser.Entity;
         }
@@ -42,14 +36,14 @@ namespace WebApi.Services
             var user = getUser(id);
 
             // copy model to user and save
-            _mapper.Map(model, user);
-            _context.Users.Update(user);
-            _context.SaveChanges();
+            mapper.Map(model, user);
+            context.Users.Update(user);
+            context.SaveChanges();
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _context.Users;
+            return context.Users;
         }
 
         public User GetById(int id)
@@ -60,8 +54,28 @@ namespace WebApi.Services
         public void Remove(int id)
         {
             var user = getUser(id);
-            _context.Users.Remove(user);
-            _context.SaveChanges();
+            context.Users.Remove(user);
+            context.SaveChanges();
+        }
+
+        public async Task<User> AddAsync(AddUser model)
+        {
+           var newUser = mapper.Map<User>(model);
+
+            await context.AddAsync(newUser);
+            await context.SaveChangesAsync();
+
+            Thread.Sleep(5000);
+
+            AddNotification notification = new()
+            {
+                Content = "New User Create Successfully",
+                TargetId = newUser.Id
+            };
+
+            await notificationService.SendNotification(notification);
+
+            return newUser;
         }
 
 
@@ -69,9 +83,11 @@ namespace WebApi.Services
 
         private User getUser(int id)
         {
-            var user = _context.Users.Find(id);
+            var user = context.Users.Find(id);
             if (user == null) throw new KeyNotFoundException("User not found");
             return user;
         }
+
+       
     }
 }

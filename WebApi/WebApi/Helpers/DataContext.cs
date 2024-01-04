@@ -19,5 +19,6 @@ namespace WebApi.Helpers
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

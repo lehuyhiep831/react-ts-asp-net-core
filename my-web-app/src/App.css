@@ -17,7 +17,6 @@
 	background-color: #282c34;
 	min-height: 10vh;
 	display: flex;
-	flex-direction: row;
 	gap: 1rem;
 	align-items: center;
 	justify-content: start;
@@ -26,9 +25,12 @@
 }
 
 .App-body {
-	background-color: #d1d1d1;
+	background-color: #424650;
 	min-height: 90vh;
 
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	font-size: calc(10px + 2vmin);
 	color: white;
 }
@@ -48,17 +50,52 @@
 
 .Page-container {
 	display: flex;
-	flex-direction: column;
+	width: 100%;
+	min-height: 90vh;
 }
 
 .Page-content {
-	height: 100%;
+	min-height: 100%;
+	width: 50%;
+	float: left;
+
+	display: flex;
+	flex-direction: column;
+	border: 1px solid white;
 }
 
-.Page-title {
+.Page-sidebar {
+	float: left;
+	width: 30%;
 	height: fit-content;
-	background-color: #aab1bd;
+
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.Page-notification {
+	min-height: 100%;
+	width: 20%;
+	float: left;
+	border: 1px solid white;
+}
+
+.Page-button-group {
+	padding: 10px;
+}
+
+button {
+	font-size: large;
+	padding: 5;
+	margin: 10px;
+}
+
+label {
+	padding: 10px;
+}
+
+input {
+	font-size: large;
 }

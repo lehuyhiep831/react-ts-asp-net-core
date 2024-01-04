@@ -1,14 +1,17 @@
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Helpers;
+using WebApi.Hubs;
 using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container. 
 {
-    // usesqlite db in development
-    //builder.Services.AddDbContext<DataContext>();
+    // if (app.Environment.IsDevelopment())
     builder.Services.AddDbContext<DataContext, SqliteDataContext>();
+    // else (switch to add migration)
+    // builder.Services.AddDbContext<DataContext>();
 
     builder.Services.AddCors();
 
@@ -20,15 +23,19 @@ var builder = WebApplication.CreateBuilder(args);
 
     // configure DI for application services
     builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddScoped<INotificationService, NotificationService>();
 
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    // Realtime 
+    builder.Services.AddSignalR();
 }
 
 var app = builder.Build();
- 
+
 // migrate any database changes on startup (includes initial db creation)
 using (var scope = app.Services.CreateScope())
 {
@@ -51,11 +58,19 @@ app.UseHttpsRedirection();
 app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
-    .AllowAnyHeader());
+    .AllowAnyHeader()
+    //.AllowCredentials()
+    //.WithOrigins("http://localhost:3000/")
+    );
 
 // global error handler
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
-app.MapControllers();
+app.UseRouting().UseEndpoints(endpoints =>
+{
+    
+    endpoints.MapControllers();
+    endpoints.MapHub<NotificationHub>("/ws/notification");
+});
 
 app.Run();

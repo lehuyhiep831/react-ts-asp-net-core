@@ -21,6 +21,23 @@ namespace WebApi.Migrations.SqlServerMigrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("WebApi.Entities.Notification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TargetId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("WebApi.Entities.User", b =>
                 {
                     b.Property<int>("Id")

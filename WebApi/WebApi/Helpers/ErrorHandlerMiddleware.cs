@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
+
 namespace WebApi.Helpers
 {
     public class ErrorHandlerMiddleware
@@ -39,7 +40,7 @@ namespace WebApi.Helpers
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
+                var result =  JsonSerializer.Serialize(new { message = error?.Message });
                 await response.WriteAsync(result);
             }
         }
