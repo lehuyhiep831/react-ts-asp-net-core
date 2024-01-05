@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { User, editUser, getUser } from '../_services/User.services'
+import { User, editUser, getUser } from '../../services/User.services'
 
 type FormData = {
 	name: string

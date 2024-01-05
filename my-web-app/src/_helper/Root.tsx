@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
-import { Notification } from '../user'
+import { Notification } from '../components/user'
 
 export function Root() {
 	return (
@@ -17,6 +17,12 @@ export function Root() {
 					to="/users"
 				>
 					Users
+				</Link>
+				<Link
+					className="App-link"
+					to="/roles"
+				>
+					Roles
 				</Link>
 				<Notification></Notification>
 			</div>

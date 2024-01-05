@@ -16,7 +16,7 @@ export function Notification() {
 				.build()
 
 			connection.on('NewNotification', (notification: any) => {
-				console.log('notification', notification)
+				//console.log('notification', notification)
 				setNotification(notification)
 			})
 
@@ -26,13 +26,15 @@ export function Notification() {
 
 			await connection
 				.start()
-				.then((response) => console.log(response))
+				.then((response) => {
+					//console.log(response)
+				})
 				.catch((err) => {
-					console.log(err)
+					//console.log(err)
 				})
 
 			if (connection.state === HubConnectionState.Connected) {
-				console.log('Connected')
+				//console.log('Connected')
 			}
 
 			return connection

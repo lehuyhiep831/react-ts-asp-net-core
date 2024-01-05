@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { User, deleteUser, getUser } from '../_services/User.services'
+import { User, deleteUser, getUser } from '../../services/User.services'
 
 export function Details() {
 	const { id } = useParams()
@@ -13,7 +13,7 @@ export function Details() {
 					setUser(res)
 				})
 				.catch((err) => {
-					console.log(err)
+					//console.log(err)
 
 					if (err.status === 404) navigate('/users/not-found')
 				})

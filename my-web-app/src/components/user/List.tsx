@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import { User, getUsers } from '../_services/User.services'
+import { User, getUsers } from '../../services/User.services'
 
 export function List() {
 	const [users, setUsers] = useState<User[]>()
 
 	const location = useLocation()
 	useEffect(() => {
-		console.log('get new data')
-
 		getUsers()
 			.then((response) => {
 				setUsers(response)

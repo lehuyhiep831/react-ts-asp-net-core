@@ -1,8 +1,12 @@
 import axios from 'axios'
-import { RouterProvider } from 'react-router-dom'
+import { BrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom'
 
+import { Root } from '_helper/Root'
+import { ErrorPage } from 'components/errors/Errors'
+import { Dashboard } from 'components/home/Dashboard'
 import './App.css'
-import { router } from './_helper/Router'
+import { List } from 'components/user'
+import { router } from '_helper/Router'
 
 export function App() {
 	// Add a request interceptor
@@ -30,14 +34,34 @@ export function App() {
 		function (error) {
 			// Any status codes that falls outside the range of 2xx cause this function to trigger
 			// Do something with response error
-
-			return Promise.reject(error.response)
+			if (error.response) return Promise.reject(error.response)
 		}
 	)
 
 	return (
 		<div className="App">
-			<RouterProvider router={router} />
+			<RouterProvider router={router}></RouterProvider>
+			{/* <BrowserRouter>
+				<Routes>
+					<Route
+						path="/"
+						element={<Root></Root>}
+					>
+						<Route
+							index
+							element={<Dashboard></Dashboard>}
+						></Route>
+					</Route>
+					<Route
+						path="/users"
+						element={<List></List>}
+					></Route>
+					<Route
+						path="*"
+						element={<ErrorPage></ErrorPage>}
+					></Route>
+				</Routes>
+			</BrowserRouter> */}
 		</div>
 	)
 }

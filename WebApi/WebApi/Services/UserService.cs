@@ -42,7 +42,7 @@ namespace WebApi.Services
         }
 
         public IEnumerable<User> GetAll()
-        {
+        { 
             return context.Users;
         }
 
@@ -65,7 +65,7 @@ namespace WebApi.Services
             await context.AddAsync(newUser);
             await context.SaveChangesAsync();
 
-            Thread.Sleep(5000);
+            Thread.Sleep(10000);
 
             AddNotification notification = new()
             {

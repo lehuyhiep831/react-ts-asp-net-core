@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import logo from './../logo.svg'
-import { User, addUser, addUserAsync } from '../_services/User.services'
+import { User, addUser, addUserAsync } from '../../services/User.services'
+import { Logo } from '_media'
 
 type FormData = {
 	name: string
@@ -89,23 +89,17 @@ export function Add() {
 						Save
 					</button>
 
-					<button
+					{/* <button
 						disabled={isSubmitting}
 						type="button"
 						onClick={onSubmitAsync}
 					>
 						Save (But take more time)
-					</button>
+					</button> */}
 				</div>
 			</form>
 
-			{isSubmitting && (
-				<img
-					src={logo}
-					className="App-logo"
-					alt="logo"
-				/>
-			)}
+			{isSubmitting && <Logo></Logo>}
 			{result && (
 				<div>
 					New user added successfully!{' '}
