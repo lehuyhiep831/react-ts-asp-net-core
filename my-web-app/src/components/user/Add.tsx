@@ -82,20 +82,20 @@ export function Add() {
 					></input>
 				</label>
 				<div className="App-button-group">
-					<button
+					{/* <button
 						disabled={isSubmitting}
 						type="submit"
 					>
 						Save
-					</button>
+					</button> */}
 
-					{/* <button
+					<button
 						disabled={isSubmitting}
 						type="button"
 						onClick={onSubmitAsync}
 					>
 						Save (But take more time)
-					</button> */}
+					</button>
 				</div>
 			</form>
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { User, getUsers } from '../../services/User.services'
+import { Logo } from '_media'
 
 export function List() {
 	const [users, setUsers] = useState<User[]>()
@@ -24,6 +25,7 @@ export function List() {
 				>
 					Add User
 				</Link>
+				{!users && <Logo></Logo>}
 				{users?.map((user: User) => (
 					<div key={user.id}>
 						<Link

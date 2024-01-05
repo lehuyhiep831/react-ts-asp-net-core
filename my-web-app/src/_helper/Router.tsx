@@ -18,7 +18,6 @@ export const routesConfig = [
 			{
 				path: '/users',
 				element: <List />,
-				errorElement: <ErrorPage />,
 				children: [
 					{
 						path: '/users/add',

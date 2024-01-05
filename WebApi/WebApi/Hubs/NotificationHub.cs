@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using WebApi.Entities;
+using WebApi.Models;
 using WebApi.Services;
 
 namespace WebApi.Hubs
@@ -16,9 +17,7 @@ namespace WebApi.Hubs
         // Handle when a new connection is establish or terminated
         public override async Task OnConnectedAsync()
         {
-            // Get notification history on connected 
-           // var notifications = await _notificationService.GetAll();
-            //await Clients.Caller.SendAsync("NotificationsHistory", notifications);
+           
         }
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
@@ -28,10 +27,12 @@ namespace WebApi.Hubs
         }
 
         
-        public async Task SendNotification(Notification notification)
+        public async Task SendNotification(AddNotification notification)
         {
             // Publish new notification to all connections 
-            await Clients.All.SendAsync("NewNotification", notification);
+            await Clients.Others.SendAsync("NewNotification", notification);
         }
+
+         
     }
 }

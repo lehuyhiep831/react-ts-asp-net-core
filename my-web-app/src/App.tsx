@@ -1,12 +1,8 @@
 import axios from 'axios'
-import { BrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
 
-import { Root } from '_helper/Root'
-import { ErrorPage } from 'components/errors/Errors'
-import { Dashboard } from 'components/home/Dashboard'
-import './App.css'
-import { List } from 'components/user'
 import { router } from '_helper/Router'
+import './App.css'
 
 export function App() {
 	// Add a request interceptor
@@ -40,28 +36,7 @@ export function App() {
 
 	return (
 		<div className="App">
-			<RouterProvider router={router}></RouterProvider>
-			{/* <BrowserRouter>
-				<Routes>
-					<Route
-						path="/"
-						element={<Root></Root>}
-					>
-						<Route
-							index
-							element={<Dashboard></Dashboard>}
-						></Route>
-					</Route>
-					<Route
-						path="/users"
-						element={<List></List>}
-					></Route>
-					<Route
-						path="*"
-						element={<ErrorPage></ErrorPage>}
-					></Route>
-				</Routes>
-			</BrowserRouter> */}
+			<RouterProvider router={router} />
 		</div>
 	)
 }

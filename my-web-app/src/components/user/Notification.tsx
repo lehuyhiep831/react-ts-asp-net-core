@@ -2,8 +2,13 @@ import { HubConnectionBuilder, HttpTransportType, HubConnectionState } from '@mi
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
+type NotificationData = {
+	content: string
+	targetId: number
+}
+
 export function Notification() {
-	const [notification, setNotification] = useState<{ content: string; targetId: number }>()
+	const [notification, setNotification] = useState<NotificationData>()
 
 	useEffect(() => {
 		async function setUpSignalRConnection() {
@@ -34,6 +39,7 @@ export function Notification() {
 				})
 
 			if (connection.state === HubConnectionState.Connected) {
+				connection.invoke('SendNotification', { content: 'A user connected', targetId: 0 })
 				//console.log('Connected')
 			}
 
@@ -47,13 +53,22 @@ export function Notification() {
 			{notification && (
 				<>
 					<div> {notification.content} </div>
-					<Link
-						className="App-link"
-						to={`/users/${notification.targetId}`}
-						onClick={() => setNotification(undefined)}
-					>
-						Check it out?
-					</Link>
+					{notification.targetId !== 0 ? (
+						<Link
+							className="App-link"
+							to={`/users/${notification.targetId}`}
+							onClick={() => setNotification(undefined)}
+						>
+							Check it out?
+						</Link>
+					) : (
+						<div
+							className="App-link"
+							onClick={() => setNotification(undefined)}
+						>
+							Ok bro!
+						</div>
+					)}
 				</>
 			)}
 		</div>
