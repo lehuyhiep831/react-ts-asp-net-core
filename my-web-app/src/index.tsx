@@ -1,12 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+
+import { store } from '_redux'
 import { App } from './App'
+
+//import css module/library before render the app
 import './index.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
 	<React.StrictMode>
-		<App></App>
+		<Provider store={store}>
+			<App></App> {/* to be more readable RouterProvider will pe place inside <App></App>*/}
+		</Provider>
 	</React.StrictMode>
 )
 

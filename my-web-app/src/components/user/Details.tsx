@@ -1,68 +1,64 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { User, deleteUser, getUser } from '../../services/User.services'
+
+import { useAppDispatch, useAppSelector, userActions } from '_redux'
+import { Logo } from 'components/common'
 
 export function Details() {
 	const { id } = useParams()
 	const navigate = useNavigate()
-	const [user, setUser] = useState<User>()
-	useEffect(() => {
-		if (id)
-			getUser(id)
-				.then((res) => {
-					setUser(res)
-				})
-				.catch((err) => {
-					//console.log(err)
+	const dispatch = useAppDispatch()
+	const user = useAppSelector((rootState) => rootState.user.item)
 
-					if (err.status === 404) navigate('/users/not-found')
-				})
-	}, [id, navigate])
+	useEffect(() => {
+		try {
+			dispatch(userActions.getUser(id))
+		} catch {
+			navigate('/users/not-found')
+		}
+	}, [dispatch, id, navigate])
 
 	async function onRemove() {
-		if (id)
-			await deleteUser(id).then(() => {
-				setUser(undefined)
-			})
+		try {
+			dispatch(userActions.deleteUser(id))
+				.unwrap()
+				.then((_) => {
+					navigate('/users')
+				})
+		} catch {
+			navigate('/users/not-found')
+		}
 	}
 
 	return (
 		<div>
-			{user ? (
+			<div className="Page-title">
+				<h4>User details</h4>
+				<h4>
+					<Link
+						className="App-link"
+						to={`/users`}
+					>
+						Back
+					</Link>
+				</h4>
+			</div>
+			{!(user?.loading && user?.error) && (
 				<>
-					<div className="Page-title">
-						<h4>User details</h4>
-						<h4>
-							<Link
-								className="App-link"
-								to={`/users`}
-							>
-								Back
-							</Link>
-						</h4>
-					</div>
-					{`${user.name} are ${user.age} years old! `}
-					<button onClick={() => navigate(`/users/${user.id}/edit`)}>Update?</button>
-					{`or`}
+					<label>This is {`${user?.value?.name}`}</label>
+
+					<button onClick={() => navigate(`/users/${id}/edit`)}>Update</button>
+
 					<button
 						type="button"
 						onClick={onRemove}
 					>
 						Remove
 					</button>
-					{`?`}
 				</>
-			) : (
-				<>
-					{`Ops! user not found`}
-					<Link
-						className="App-link"
-						to={`/users`}
-					>
-						Go back?
-					</Link>{' '}
-				</>
-			)}{' '}
+			)}
+			{user?.loading && <Logo></Logo>}
+			{user?.error && <div>Error loading user: {user.error.message}</div>}
 		</div>
 	)
 }

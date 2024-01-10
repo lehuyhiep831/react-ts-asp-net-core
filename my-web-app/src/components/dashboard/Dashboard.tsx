@@ -1,4 +1,4 @@
-import { Logo } from '_media'
+import { Logo } from 'components/common'
 
 export function Dashboard() {
 	return <Logo></Logo>

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { routesConfig } from '_helper/Router'
+import { routes } from 'router/router'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { App } from './App'
 
@@ -11,8 +11,8 @@ describe('App', () => {
 	})
 
 	test('renders Error page', () => {
-		const router = createMemoryRouter(routesConfig, {
-			initialEntries: ['/oops'],
+		const router = createMemoryRouter(routes, {
+			initialEntries: ['/unknown-route'],
 		})
 		render(<RouterProvider router={router}></RouterProvider>)
 		const ErrorText = screen.getByText(/Sorry, an unexpected error has occurred./i)

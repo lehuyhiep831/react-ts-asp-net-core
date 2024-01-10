@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { User, getUsers } from '../../services/User.services'
-import { Logo } from '_media'
+import { useEffect } from 'react'
+import { Link, Outlet } from 'react-router-dom'
+
+import { useAppDispatch, useAppSelector, userActions } from '_redux'
+import { Logo } from 'components/common'
 
 export function List() {
-	const [users, setUsers] = useState<User[]>()
-
-	const location = useLocation()
+	const users = useAppSelector((rootState) => rootState.user.list)
+	const dispatch = useAppDispatch()
 	useEffect(() => {
-		getUsers()
-			.then((response) => {
-				setUsers(response)
-			})
-			.catch((err) => {})
-	}, [location])
+		dispatch(userActions.getUsers())
+	}, [dispatch])
 
 	return (
 		<div className="Page-container">
@@ -25,17 +21,19 @@ export function List() {
 				>
 					Add User
 				</Link>
-				{!users && <Logo></Logo>}
-				{users?.map((user: User) => (
-					<div key={user.id}>
-						<Link
-							className="App-link"
-							to={`/users/${user.id}`}
-						>
-							{user.name}
-						</Link>
-					</div>
-				))}
+				{!(users?.loading ?? users?.error) &&
+					users?.value?.map((user) => (
+						<div key={user.id}>
+							<Link
+								className="App-link"
+								to={`/users/${user.id}`}
+							>
+								{user.name}
+							</Link>
+						</div>
+					))}
+				{users?.loading && <Logo></Logo>}
+				{users?.error && <div>Error loading user: {users.error.message}</div>}
 			</div>
 			<div className="Page-content">
 				<Outlet></Outlet>

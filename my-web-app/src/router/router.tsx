@@ -1,14 +1,14 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { RouteObject, createBrowserRouter } from 'react-router-dom'
 
 import { ErrorPage } from '../components/errors/Errors'
-import { Dashboard } from '../components/home/Dashboard'
+import { Dashboard } from '../components/dashboard/Dashboard'
 import { Add, Details, Edit, List } from '../components/user'
-import { Root } from './Root'
+import { RootLayout } from './RootLayout'
 
-export const routesConfig = [
+export const routes: RouteObject[] = [
 	{
 		path: '/',
-		element: <Root />,
+		element: <RootLayout />,
 		errorElement: <ErrorPage />,
 		children: [
 			{
@@ -50,4 +50,4 @@ export const routesConfig = [
 	// },
 ]
 
-export const router = createBrowserRouter(routesConfig)
+export const router = createBrowserRouter(routes)

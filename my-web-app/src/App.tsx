@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { RouterProvider } from 'react-router-dom'
 
-import { router } from '_helper/Router'
+import { router } from 'router/router'
+
 import './App.css'
 
 export function App() {
@@ -9,7 +10,7 @@ export function App() {
 	axios.interceptors.request.use(
 		function (config) {
 			// Do something before request is sent
-			config.baseURL = 'https://localhost:5000'
+			config.baseURL = process.env.REACT_APP_BASE_NAME
 			return config
 		},
 		function (error) {

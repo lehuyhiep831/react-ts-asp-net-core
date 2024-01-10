@@ -1,7 +1,8 @@
 import { Link, Outlet } from 'react-router-dom'
-import { Notification } from '../components/user'
 
-export function Root() {
+import { Notification } from 'components'
+
+export function RootLayout() {
 	return (
 		<>
 			<div className="App-header">
@@ -24,7 +25,7 @@ export function Root() {
 				>
 					Roles
 				</Link>
-				<Notification></Notification>
+				{/* <Notification></Notification> */}
 			</div>
 			<div className="App-body">
 				<Outlet />

@@ -1,21 +1,19 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { User, addUser, addUserAsync } from '../../services/User.services'
-import { Logo } from '_media'
+import { User, useAppDispatch, userActions } from '_redux'
+import { Logo } from 'components/common'
 
-type FormData = {
-	name: string
-	age: number
-}
 export function Add() {
-	const [formData, setFormData] = useState<FormData>({ name: '', age: 0 })
+	const dispatch = useAppDispatch()
+
+	const [formData, setFormData] = useState<User>()
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [result, setResult] = useState<User>()
+	const [result, setResult] = useState<User | undefined>()
 
 	function handleInputChange(e: any) {
 		const { name, value } = e.target
-		const newFormData = { ...formData, [name]: value }
+		const newFormData = { ...formData, [name]: value } as User
 		setFormData(newFormData)
 	}
 
@@ -25,23 +23,12 @@ export function Add() {
 		setResult(undefined)
 
 		try {
-			const response = await addUser(formData)
-			setResult(response)
-		} catch (error) {
-			// Handle error, show error message, etc.
-		}
-
-		setIsSubmitting(false)
-	}
-
-	async function onSubmitAsync(e: any) {
-		e.preventDefault()
-		setIsSubmitting(true)
-		setResult(undefined)
-
-		try {
-			const response = await addUserAsync(formData)
-			setResult(response)
+			await dispatch(userActions.addUser(formData))
+				.unwrap()
+				.then((response) => {
+					setResult(response)
+					dispatch(userActions.getUsers())
+				})
 		} catch (error) {
 			// Handle error, show error message, etc.
 		}
@@ -60,41 +47,24 @@ export function Add() {
 					Back
 				</Link>
 			</div>
+
 			<form onSubmit={onSubmit}>
 				<label>
 					Name:{' '}
 					<input
 						name="name"
 						type="text"
-						value={formData?.name}
+						value={formData?.name ?? ''}
 						onChange={handleInputChange}
 					></input>
 				</label>
 
-				<label>
-					Age:{' '}
-					<input
-						name="age"
-						type="number"
-						value={formData?.age}
-						onChange={handleInputChange}
-						min={0}
-					></input>
-				</label>
 				<div className="App-button-group">
-					{/* <button
+					<button
 						disabled={isSubmitting}
 						type="submit"
 					>
 						Save
-					</button> */}
-
-					<button
-						disabled={isSubmitting}
-						type="button"
-						onClick={onSubmitAsync}
-					>
-						Save (But take more time)
 					</button>
 				</div>
 			</form>

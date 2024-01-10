@@ -1,34 +1,32 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { User, editUser, getUser } from '../../services/User.services'
 
-type FormData = {
-	name: string
-	age: number
-}
+import { User, useAppDispatch, useAppSelector, userActions } from '_redux'
+import { Logo } from 'components/common'
+
 export function Edit() {
 	const { id } = useParams()
 	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
+	const user = useAppSelector((rootState) => rootState.user.item)
 
-	const [formData, setFormData] = useState<FormData>({ name: '', age: 0 })
+	const [formData, setFormData] = useState<User>()
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [result, setResult] = useState<User>()
 
 	useEffect(() => {
-		if (id)
-			getUser(id)
-				.then((res) => {
-					setFormData({ name: res.name, age: res.age })
-				})
-				.catch((err) => {
-					// user not found !?!
-					if (err.status === 404) navigate('/users/not-found')
-				})
-	}, [id, navigate])
+		try {
+			dispatch(userActions.getUser(id))
+				.unwrap()
+				.then((user) => setFormData(user))
+		} catch {
+			navigate('/users/not-found')
+		}
+	}, [dispatch, id, navigate])
 
 	function handleInputChange(e: any) {
 		const { name, value } = e.target
-		const newFormData = { ...formData, [name]: value }
+		const newFormData = { ...formData, [name]: value } as User
 		setFormData(newFormData)
 	}
 
@@ -37,21 +35,23 @@ export function Edit() {
 		setIsSubmitting(true)
 
 		try {
-			if (id) {
-				const response = await editUser(id, formData)
-				setResult(response)
-			}
+			dispatch(userActions.editUser({ id: id, data: formData }))
+				.unwrap()
+				.then((response) => {
+					setResult(response)
+				})
 		} catch (error) {
 			// Handle error, show error message, etc.
 		}
 
 		setIsSubmitting(false)
 	}
+	console.log(formData)
 
 	return (
 		<>
 			<div className="Page-title">
-				<h4>Edit a user</h4>
+				<h4>Edit user</h4>
 				<Link
 					className="App-link"
 					to={`/users/${id}`}
@@ -59,36 +59,39 @@ export function Edit() {
 					Cancel
 				</Link>
 			</div>
-			<form onSubmit={onSubmit}>
-				<label>
-					Age:{' '}
-					<input
-						name="age"
-						type="number"
-						value={formData?.age}
-						onChange={handleInputChange}
-						min={0}
-					></input>
-				</label>
-				<button
-					disabled={isSubmitting}
-					type="submit"
-				>
-					Save
-				</button>
-			</form>
 
+			{!(user?.loading ?? user?.error) && (
+				<form onSubmit={onSubmit}>
+					<label>
+						Name:{' '}
+						<input
+							name="name"
+							type="string"
+							value={formData?.name}
+							onChange={handleInputChange}
+							min={0}
+						></input>
+					</label>
+					<button
+						disabled={isSubmitting}
+						type="submit"
+					>
+						Save
+					</button>
+				</form>
+			)}
+			{(user?.loading ?? isSubmitting) && <Logo></Logo>}
+			{user?.error && <div>Error loading user: {user.error.message}</div>}
 			{result && (
-				<>
-					Update successfully!{' '}
+				<div>
+					User updated successfully!{' '}
 					<Link
 						className="App-link"
 						to={`/users/${id}`}
 					>
-						{' '}
-						Check it out?
+						See Detail
 					</Link>
-				</>
+				</div>
 			)}
 		</>
 	)
